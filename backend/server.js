@@ -4,11 +4,12 @@ const cors = require('cors');
 const db = require('./models'); // Sequelize instance and models
 
 const app = express();
-// Use the PORT from .env, but ensure it's the new one (e.g., 3001)
-const PORT = process.env.PORT || 5000; // KEEP THIS LINE AS IS FOR NOW
+const PORT = process.env.PORT || 5000; 
 
 // Middleware
-app.use(cors()); // CORS for all routes (allows frontend to talk to backend)
+app.use(cors({
+  origin: 'http://127.0.0.1:5500' 
+})); // CORS (allows frontend to talk to backend)
 app.use(express.json()); // Parse incoming JSON request bodies
 
 // Basic Test Route
@@ -32,7 +33,6 @@ db.sequelize.sync({ alter: true }) // Connects to DB and creates/updates tables 
     console.error('Error syncing database:', err); // Errors during DB connection/sync
   });
 
-// --- Global Unhandled Error Handling --- (Keep these, they are good practice)
 process.on('uncaughtException', (err) => {
   console.error('UNCAUGHT EXCEPTION! Shutting down...');
   console.error(err.name, err.message, err.stack);
